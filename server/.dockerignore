@@ -1,0 +1,10 @@
+Dockerfile
+.dockerignore
+node_modules
+public
+.vscode
+.devcontainer
+README.md
+Makefile
+.env
+key.json
