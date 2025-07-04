@@ -1,0 +1,9 @@
+{
+  "short_name": "firebase-authentication-hands-on-app",
+  "name": "firebase-authentication-hands-on-app",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

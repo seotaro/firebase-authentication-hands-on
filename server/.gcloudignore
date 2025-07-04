@@ -1,0 +1,12 @@
+# ignore all
+
+*
+
+# upload list
+
+!.
+!package.json
+!yarn.lock
+!main.js
+!public/
+!Dockerfile
