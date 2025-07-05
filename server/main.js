@@ -1,7 +1,6 @@
 "use strict";
 
 require('dotenv').config();
-const { join } = require('path');
 
 const admin = require('firebase-admin');
 admin.initializeApp({ credential: admin.credential.applicationDefault() });
@@ -21,33 +20,24 @@ admin.initializeApp({ credential: admin.credential.applicationDefault() });
     methods: ['GET', 'POST'],
   });
 
-  const authGuard = (fastify) => {
-    return async (request, reply) => {
-      console.log(`authGuard method:${request.method}, url:${request.url}, headers:${JSON.stringify(request.headers)}`);
+  fastify.addHook('onRequest', async (request, reply) => {
+    console.log(`onRequest Hook method:${request.method}, url:${request.url}, headers:${JSON.stringify(request.headers)}`);
 
-      const token = request.headers.authorization?.split(' ')[1];
-      if (!token) return reply.code(401).send({ error: 'Invalid token' });
+    const token = request.headers.authorization?.split(' ')[1];
+    if (!token) return reply.code(401).send({ error: 'Invalid token' });
 
-      return admin.auth().verifyIdToken(token)
-        .then(decoded => {
-          return request.user = decoded;
-        })
-        .catch((error) => {
-          return reply.code(401).send({ error: error.message });
-        });
-    }
-  }
-
-  // 認証ありルート
-  fastify.get('/api', { preHandler: authGuard(fastify) }, async (request, reply) => {
-    console.log('GET /api', request.user);
-    return { message: 'Hello', uid: request.user.uid, name: request.user.name, email: request.user.email };
+    return admin.auth().verifyIdToken(token)
+      .then(decoded => {
+        return request.user = decoded;
+      })
+      .catch((error) => {
+        return reply.code(401).send({ error: error.message });
+      });
   });
 
-  // クライアントページは認証なしでルートで返す。
-  fastify.register(require('@fastify/static'), {
-    root: join(process.cwd(), "public"),
-    prefix: "/",
+  fastify.get('/api', async (request, reply) => {
+    console.log('GET /api', request.user);
+    return { message: 'Hello', uid: request.user.uid, name: request.user.name, email: request.user.email };
   });
 
   const start = async () => {
