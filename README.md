@@ -26,11 +26,12 @@ sequenceDiagram
   participant Firebase Authentication
 
   App->>API: Authorization: Bearer token
+  API->>API: onRequest hook
   API->>Firebase Authentication: admin.auth().verifyIdToken
 
   alt valid token
     Firebase Authentication-->>API: token's decoded claims
-    API-->>App: 200 Ok
+    API-->>App: 200 Ok w/ protected data
   else invalid token
     API-->>App: 401 Unauthorized
   end
