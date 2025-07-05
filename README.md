@@ -30,9 +30,9 @@ sequenceDiagram
 
   alt valid token
     Firebase Authentication-->>API: token's decoded claims
-    API-->>App: 200
+    API-->>App: 200 Ok
   else invalid token
-    API-->>App: 401
+    API-->>App: 401 Unauthorized
   end
 ```
 
