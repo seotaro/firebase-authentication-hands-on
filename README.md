@@ -1,6 +1,53 @@
 # firebase-authentication-hands-on
 
-[ライブデモ](https://fir-authentication-hands.web.app/)
+[live demo](https://fir-authentication-hands.web.app/)
+
+Login)
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant App
+  participant API
+  participant Firebase Authentication
+
+  User->>App: Login
+  App->>Firebase Authentication: signInWithPopup（e.g., GoogleAuthProvider）
+  Firebase Authentication-->>App: token
+```
+
+Access API)
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant App
+  participant API
+  participant Firebase Authentication
+
+  App->>API: Authorization: Bearer token
+  API->>Firebase Authentication: admin.auth().verifyIdToken
+
+  alt valid token
+    Firebase Authentication-->>API: token's decoded claims
+    API-->>App: 200
+  else invalid token
+    API-->>App: 401
+  end
+```
+
+Logoff)
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant App
+  participant API
+  participant Firebase Authentication
+
+  User->>App: Logoff
+  App->>Firebase Authentication: signOut
+```
 
 ## Hosting setting
 
