@@ -5,12 +5,23 @@
 ## Hosting setting
 
 ```bash
+firebase login
+
 cd app
 firebase init
 
-? Which Firebase features do you want to set up for this directory? Press Space to select features, then Enter to confirm your choices. (Press <space> to select, <a> to 
-toggle all, <i> to invert selection, and <enter> to proceed)
-❯◉ Hosting: Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys
+? Which Firebase features do you want to set up for this directory? Press Space to select features, then Enter to confirm your choices. Hosting: Configure files for 
+Firebase Hosting and (optionally) set up GitHub Action deploys
+
+=== Project Setup
+
+First, let's associate this project directory with a Firebase project.
+You can create multiple project aliases by running firebase use --add, 
+but for now we'll just set up a default project.
+
+? Please select an option: Use an existing project
+? Select a default Firebase project for this directory: xxxxxxxxxxxxxxxxxxxxxxxxxx (xxxxxxxxxxxxxxxxxxxxxxxxxx)
+i  Using project xxxxxxxxxxxxxxxxxxxxxxxxxx (xxxxxxxxxxxxxxxxxxxxxxxxxx)
 
 ? What do you want to use as your public directory? build
 
