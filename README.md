@@ -85,6 +85,8 @@ i  Writing project information to .firebaserc...
 ✔  Firebase initialization complete!
 ```
 
+※ AppをCloud Runなどでサーバーを立てて、@fastify/staticでホストするとドメインをFirebase >> Authentication >> 承認済みドメインに追加しないといけない。AppだけFirebase Hostingでホストすればデフォルトで承認済みドメインなのでおすすめ。
+
 ## build
 
 ```bash
