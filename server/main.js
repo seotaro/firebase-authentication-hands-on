@@ -4,9 +4,7 @@ require('dotenv').config();
 const { join } = require('path');
 
 const admin = require('firebase-admin');
-admin.initializeApp({
-  credential: admin.credential.cert(require(process.env.FIREBASE_SERVICE_ACCOUNT)),
-});
+admin.initializeApp({ credential: admin.credential.applicationDefault() });
 
 (async () => {
   const fastify = require('fastify')({
@@ -23,30 +21,30 @@ admin.initializeApp({
     methods: ['GET', 'POST'],
   });
 
-  fastify.addHook('onRequest', async (request, reply) => {
-    console.log(`onRequest Hook method:${request.method}, url:${request.url}, headers:${JSON.stringify(request.headers)}`);
+  const authGuard = (fastify) => {
+    return async (request, reply) => {
+      console.log(`authGuard method:${request.method}, url:${request.url}, headers:${JSON.stringify(request.headers)}`);
 
-    const authHeader = request.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return reply.code(401).send({ error: 'Missing or invalid token' });
+      const token = request.headers.authorization?.split(' ')[1];
+      if (!token) return reply.code(401).send({ error: 'Invalid token' });
+
+      return admin.auth().verifyIdToken(token)
+        .then(decoded => {
+          return request.user = decoded;
+        })
+        .catch((error) => {
+          return reply.code(401).send({ error: error.message });
+        });
     }
+  }
 
-    const idToken = authHeader.split(' ')[1];
-    try {
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
-      request.user = decodedToken;
-
-    } catch (error) {
-      return reply.code(401).send({ error: error.message });
-    }
-  });
-
-  fastify.get('/api', async (request, reply) => {
+  // 認証ありルート
+  fastify.get('/api', { preHandler: authGuard(fastify) }, async (request, reply) => {
     console.log('GET /api', request.user);
     return { message: 'Hello', uid: request.user.uid, name: request.user.name, email: request.user.email };
   });
 
-  // クライアントページをルートで返す。
+  // クライアントページは認証なしでルートで返す。
   fastify.register(require('@fastify/static'), {
     root: join(process.cwd(), "public"),
     prefix: "/",

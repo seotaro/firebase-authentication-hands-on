@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-const API_URL = 'http://localhost:8080/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
 function App() {
   const [user, setUser] = useState(null);
