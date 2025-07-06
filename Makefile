@@ -10,10 +10,10 @@ create-service-account:
 build:
 	cd app && yarn install && NODE_ENV='production' REACT_APP_API_URL='https://firebase-authentication-hands-on-422450192262.asia-northeast1.run.app/api' \
 		yarn react-scripts build && cd -
-	cd server && gcloud builds submit . --tag asia.gcr.io/$(PROJECT_ID)/$(API) --project $(PROJECT_ID) && cd -
+	cd api && gcloud builds submit . --tag asia.gcr.io/$(PROJECT_ID)/$(API) --project $(PROJECT_ID) && cd -
 
 deploy:
-	cd app && firebase deploy && cd -
+	firebase deploy
 	gcloud run deploy $(API) \
 		--project $(PROJECT_ID) \
 		--image asia.gcr.io/$(PROJECT_ID)/$(API) \
