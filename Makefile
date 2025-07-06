@@ -13,7 +13,7 @@ build:
 	cd server && gcloud builds submit . --tag asia.gcr.io/$(PROJECT_ID)/$(API) --project $(PROJECT_ID) && cd -
 
 deploy:
-	cd app && firebase deploy && cd -
+	firebase deploy
 	gcloud run deploy $(API) \
 		--project $(PROJECT_ID) \
 		--image asia.gcr.io/$(PROJECT_ID)/$(API) \
